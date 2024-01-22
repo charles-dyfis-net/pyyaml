@@ -80,13 +80,14 @@ with_cython = False
 if 'sdist' in sys.argv or os.environ.get('PYYAML_FORCE_CYTHON') == '1':
     # we need cython here
     with_cython = True
-try:
-    from Cython.Distutils.extension import Extension as _Extension
-    from Cython.Distutils import build_ext as _build_ext
-    with_cython = True
-except ImportError:
-    if with_cython:
-        raise
+elif os.environ.get('PYYAML_FORCE_CYTHON') != '0':
+    try:
+        from Cython.Distutils.extension import Extension as _Extension
+        from Cython.Distutils import build_ext as _build_ext
+        with_cython = True
+    except ImportError:
+        if with_cython:
+            raise
 
 try:
     from wheel.bdist_wheel import bdist_wheel
